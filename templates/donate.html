@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Donation System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top left, #00c6ff, transparent 30%),
+                radial-gradient(circle at bottom right, #7f00ff, transparent 30%),
+                linear-gradient(135deg, #0f172a, #1e293b);
+            color: #222;
+        }
+
+        .navbar {
+            padding: 20px 55px;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(16px);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+
+        .navbar h2 {
+            font-size: 26px;
+        }
+
+        .navbar span {
+            color: #38ef7d;
+        }
+
+        .navbar a {
+            color: white;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            padding: 11px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .main {
+            padding: 45px;
+            display: grid;
+            grid-template-columns: 1fr 1.3fr;
+            gap: 35px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.96);
+            padding: 32px;
+            border-radius: 28px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+            animation: fadeUp 0.8s ease;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(35px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .heading {
+            font-size: 34px;
+            margin-bottom: 8px;
+            color: #111827;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            padding: 15px;
+            border-radius: 18px;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+        }
+
+        .stat-box h3 {
+            color: #4f46e5;
+            font-size: 22px;
+        }
+
+        .stat-box p {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 16px;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99,102,241,0.15);
+        }
+
+        .amount-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .amount-buttons button {
+            padding: 12px;
+            border: none;
+            border-radius: 14px;
+            background: #eef2ff;
+            color: #4f46e5;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .amount-buttons button:hover {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .main-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .main-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 28px rgba(0,176,155,0.35);
+        }
+
+        .qr-box {
+            margin-top: 28px;
+            padding: 24px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #f8fafc, #eef2ff);
+            text-align: center;
+            border: 2px dashed #6366f1;
+        }
+
+        .qr-img {
+            width: 235px;
+            height: 235px;
+            background: white;
+            padding: 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+            transition: 0.3s;
+        }
+
+        .qr-img:hover {
+            transform: scale(1.07) rotate(1deg);
+        }
+
+        .complete-btn {
+            display: inline-block;
+            margin-top: 18px;
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            color: white;
+            padding: 13px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .message {
+            background: #dcfce7;
+            color: #166534;
+            padding: 14px;
+            border-radius: 14px;
+            margin-bottom: 18px;
+            font-weight: bold;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-box {
+            width: 230px;
+            margin-bottom: 0;
+            padding: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 22px;
+            overflow: hidden;
+            border-radius: 18px;
+        }
+
+        th, td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .status-completed {
+            background: #dcfce7;
+            color: #166534;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            inset: 0;
+            background: rgba(0,0,0,0.88);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-box {
+            background: white;
+            padding: 25px;
+            border-radius: 25px;
+            text-align: center;
+            animation: pop 0.3s ease;
+        }
+
+        @keyframes pop {
+            from {
+                transform: scale(0.7);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .modal-box img {
+            width: 430px;
+            max-width: 90%;
+        }
+
+        .close-btn {
+            margin-top: 15px;
+            background: #ef4444;
+            color: white;
+            padding: 10px 22px;
+            border-radius: 22px;
+            border: none;
+            cursor: pointer;
+        }
+
+        @media(max-width: 900px) {
+            .main {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .history-header {
+                flex-direction: column;
+                align-items: start;
+                gap: 12px;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <h2>Smart <span>Donation</span> System</h2>
+    <a href="{% url 'logout' %}">Logout</a>
+</div>
+
+<div class="main">
+
+    <div class="card">
+        <h1 class="heading">Hello, {{ request.user.username }}</h1>
+        <p class="subtitle">Generate secure dynamic UPI QR code and manage donation records.</p>
+
+        <div class="stats">
+            <div class="stat-box">
+                <h3>{{ donations.count }}</h3>
+                <p>Total Donations</p>
+            </div>
+
+            <div class="stat-box">
+                <h3>UPI</h3>
+                <p>Payment Mode</p>
+            </div>
+
+            <div class="stat-box">
+                <h3>QR</h3>
+                <p>Dynamic Payment</p>
+            </div>
+        </div>
+
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <input type="text" name="donor_name" placeholder="Enter donor name" required>
+
+            <input type="number" id="amountInput" name="amount" placeholder="Enter amount ₹" min="1" required>
+
+            <div class="amount-buttons">
+                <button type="button" onclick="setAmount(50)">₹50</button>
+                <button type="button" onclick="setAmount(100)">₹100</button>
+                <button type="button" onclick="setAmount(500)">₹500</button>
+                <button type="button" onclick="setAmount(1000)">₹1000</button>
+            </div>
+
+            <button class="main-btn" type="submit">Generate Payment QR</button>
+        </form>
+
+        {% if qr_code %}
+        <div class="qr-box">
+            <h2>Pay ₹{{ amount }}</h2>
+            <p>Donor Name: <b>{{ donor_name }}</b></p>
+
+            <img onclick="openQR()" class="qr-img" src="data:image/png;base64,{{ qr_code }}">
+
+            <br>
+
+            <a class="complete-btn" href="{% url 'complete_payment' donation_id %}">
+                Payment Completed
+            </a>
+
+            <p style="margin-top:12px;color:#64748b;">Click QR to open bigger</p>
+        </div>
+
+        <div id="qrModal" class="modal">
+            <div class="modal-box">
+                <h2>Scan QR to Pay ₹{{ amount }}</h2>
+                <br>
+                <img src="data:image/png;base64,{{ qr_code }}">
+                <br>
+                <button class="close-btn" onclick="closeQR()">Close</button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <div class="history-header">
+            <div>
+                <h2>Donation History</h2>
+                <p class="subtitle">Search and track donor records.</p>
+            </div>
+
+            <input class="search-box" type="text" id="searchInput" onkeyup="searchDonation()" placeholder="Search donor...">
+        </div>
+
+        <table id="donationTable">
+            <tr>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+
+            {% for donation in donations %}
+            <tr>
+                <td>{{ donation.donor_name }}</td>
+                <td>₹{{ donation.amount }}</td>
+
+                {% if donation.status == "Completed" %}
+                    <td><span class="status-completed">{{ donation.status }}</span></td>
+                {% else %}
+                    <td><span class="status-pending">{{ donation.status }}</span></td>
+                {% endif %}
+
+                <td>{{ donation.created_at|date:"d M Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No donation yet.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+<script>
+    function setAmount(value) {
+        document.getElementById("amountInput").value = value;
+    }
+
+    function openQR() {
+        document.getElementById("qrModal").style.display = "flex";
+    }
+
+    function closeQR() {
+        document.getElementById("qrModal").style.display = "none";
+    }
+
+    function searchDonation() {
+        let input = document.getElementById("searchInput").value.toLowerCase();
+        let table = document.getElementById("donationTable");
+        let rows = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < rows.length; i++) {
+            let name = rows[i].getElementsByTagName("td")[0];
+
+            if (name) {
+                let text = name.textContent || name.innerText;
+                rows[i].style.display = text.toLowerCase().includes(input) ? "" : "none";
+            }
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login | Smart Donation System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top left, #00c6ff, transparent 28%),
+                radial-gradient(circle at bottom right, #7f00ff, transparent 30%),
+                linear-gradient(135deg, #0f172a, #1e293b);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .login-wrapper {
+            width: 900px;
+            min-height: 540px;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(18px);
+            border-radius: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            overflow: hidden;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.45);
+            animation: fadeUp 0.8s ease;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(35px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .left {
+            padding: 55px;
+            background: linear-gradient(135deg, rgba(0,198,255,0.35), rgba(127,0,255,0.35));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .left h1 {
+            font-size: 42px;
+            margin-bottom: 18px;
+        }
+
+        .left h1 span {
+            color: #38ef7d;
+        }
+
+        .left p {
+            color: #e2e8f0;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .feature {
+            background: rgba(255,255,255,0.14);
+            padding: 14px 18px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .right {
+            padding: 55px 45px;
+            background: rgba(255,255,255,0.95);
+            color: #111827;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            width: 75px;
+            height: 75px;
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            margin-bottom: 20px;
+            box-shadow: 0 12px 28px rgba(0,176,155,0.35);
+        }
+
+        .right h2 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .right p {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 15px 48px 15px 15px;
+            margin-bottom: 16px;
+            border-radius: 16px;
+            border: 1px solid #cbd5e1;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .input-box input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99,102,241,0.15);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 14px;
+            cursor: pointer;
+            color: #64748b;
+            font-weight: bold;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 30px rgba(0,176,155,0.35);
+        }
+
+        .bottom {
+            margin-top: 20px;
+            color: #64748b;
+            text-align: center;
+        }
+
+        .bottom a {
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .msg {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 14px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        @media(max-width: 850px) {
+            .login-wrapper {
+                width: 92%;
+                grid-template-columns: 1fr;
+            }
+
+            .left {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-wrapper">
+
+    <div class="left">
+        <h1>Smart <span>Donation</span> System</h1>
+        <p>
+            Login to generate dynamic UPI QR codes, manage donor records,
+            and track completed payments easily.
+        </p>
+
+        <div class="feature">✔ Dynamic UPI QR Generation</div>
+        <div class="feature">✔ Secure User Login</div>
+        <div class="feature">✔ Donation History Tracking</div>
+        <div class="feature">✔ Stylish Dashboard UI</div>
+    </div>
+
+    <div class="right">
+        <div class="logo">₹</div>
+
+        <h2>Welcome Back</h2>
+        <p>Please login to continue</p>
+
+        {% if form.errors %}
+            <div class="msg">Invalid username or password</div>
+        {% endif %}
+
+        {% for message in messages %}
+            <div class="msg">{{ message }}</div>
+        {% endfor %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="input-box">
+                <input type="text" name="username" placeholder="Enter username" required>
+            </div>
+
+            <div class="input-box">
+                <input type="password" id="password" name="password" placeholder="Enter password" required>
+                <span class="toggle-password" onclick="togglePassword()">👁</span>
+            </div>
+
+            <button class="login-btn" type="submit">Login Now</button>
+        </form>
+
+        <div class="bottom">
+            New user?
+            <a href="{% url 'register' %}">Create Account</a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function togglePassword() {
+        let password = document.getElementById("password");
+
+        if (password.type === "password") {
+            password.type = "text";
+        } else {
+            password.type = "password";
+        }
+    }
+</script>
+
+</body>
+</html>
